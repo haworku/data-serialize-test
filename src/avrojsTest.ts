@@ -16,7 +16,7 @@ const avrojsType = avrojs.parse({
             "BENEFITS_PROVIDED",
             "CAPITATION_RATES",
             "ENCOUNTER_DATA",
-            "ENROLLE_ACCESS",
+            "ENROLLEE_ACCESS",
             "ENROLLMENT_PROCESS",
             "FINANCIAL_INCENTIVES",
             "GEO_AREA_SERVED",
@@ -26,6 +26,7 @@ const avrojsType = avrojs.parse({
             "PROGRAM_INTEGRITY",
             "QUALITY_STANDARDS",
             "RISK_SHARING_MECHANISM",
+            "OTHER",
           ],
         },
       },
@@ -33,22 +34,32 @@ const avrojsType = avrojs.parse({
     { name: "otherItemBeingAmended", type: ["null", "string"], default: null },
     {
       name: "capitationRatesAmendedInfo",
-      type: {
-        name: "CapitationRatesAmended",
-        type: "record",
-        fields: [
-          {
-            name: "AmendedReason",
-            type: {
-              name: "ReasonEnum",
-              type: "enum",
-              symbols: ["ANNUAL", "MIDYEAR", "OTHER"],
+      type: [
+        "null",
+        {
+          name: "capitationRatesAmendedInfo",
+          type: "record",
+          fields: [
+            {
+              name: "reason",
+              type: {
+                name: "reason",
+                type: "enum",
+                symbols: ["ANNUAL", "MIDYEAR", "OTHER"],
+              },
             },
-          },
-          { name: "OtherReason", type: ["null", "string"], default: null },
-        ],
-      },
+            {
+              name: "otherReason",
+              type: ["null", "string"],
+              default: null,
+            },
+          ],
+        },
+      ],
+      default: null,
     },
+    { name: "relatedToCovid19", type: "boolean", default: false },
+    { name: "relatedToVaccination", type: ["null", "boolean"], default: null },
   ],
 });
 
@@ -105,9 +116,9 @@ console.log(
   "this is an invalid instance",
   data.sampleContractAmendmentInfoInvalid
 );
-console.log("invalidPaths: ", paths1);
-console.log("invalidPaths: ", paths2);
-console.log("invalidPaths: ", pathsInvalid);
+console.log("invalidPaths1: ", paths1);
+console.log("invalidPaths2: ", paths2);
+console.log("invalidPaths3: ", pathsInvalid);
 
 /* Notes:
 - for isValid checks to work properly the schema names need to make the object being passed in (including casing). This risks being another place we are doubling up on logic, another place to add a new field

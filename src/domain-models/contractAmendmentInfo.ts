@@ -13,16 +13,16 @@ const sampleContractAmendmentInfo1 = {
   itemsBeingAmended: [
     "BENEFITS_PROVIDED",
     "CAPITATION_RATES",
-    "ENROLLE_ACCESS",
+    "ENROLLEE_ACCESS",
     "OTHER",
   ],
   otherItemBeingAmended: "This is why items amended",
   capitationRatesAmendedInfo: {
     reason: "OTHER",
-    otherReason: "This is capitation rates info",
+    // otherReason: "This is capitation rates info",
   },
-  relatedToCovid19: true,
-  relatedToVaccination: false,
+  relatedToCovid19: false,
+  // relatedToVaccination: false,
 };
 
 const sampleContractAmendmentInfo2 = {
