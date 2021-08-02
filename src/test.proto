@@ -1,6 +1,8 @@
-message ContractAmendmentInfo  {
+package testpackage;
+syntax = "proto3";
 
-    enum AmendedItems {
+message ContractAmendmentInfo  {
+enum AmendedItems {
         BENEFITS_PROVIDED = 0;
         CAPITATION_RATES = 1;
         ENCOUNTER_DATA = 2;
@@ -19,4 +21,16 @@ message ContractAmendmentInfo  {
 
     optional string OtherItemBeingAmended = 0;
 
+    enum CapitationRateAmendmentReason{
+        ANNUAL = 0;
+        MIDYEAR = 1;
+        OTHER = 2;
+    }
+   message capitationRatesAmendedInfo {
+        CapitationRateAmendmentReason reason = 0;
+        optional string otherReason = 0;
+    }
+
+    required boolean RelatedToCovid = 0;
+    optional boolean RatedToVaccination = 0
 }
