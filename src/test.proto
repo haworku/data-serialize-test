@@ -1,0 +1,29 @@
+message ContractAmendmentInfo  {
+    
+    enum AmendedItems {
+        BENEFITS_PROVIDED = 0;
+        CAPITATION_RATES = 1;
+        ENCOUNTER_DATA = 2;
+        ENROLLE_ACCESS = 3;
+        ENROLLMENT_PROCESS = 4;
+        FINANCIAL_INCENTIVES = 5;
+        GEO_AREA_SERVED = 6;
+        GRIEVANCES_AND_APPEALS_SYSTEM = 7;
+        LENGTH_OF_CONTRACT_PERIOD = 8;
+        NON_RISK_PAYMENT = 9;
+        PROGRAM_INTEGRITY =10;
+        QUALITY_STANDARDS =11;
+        RISK_SHARING_MECHANISM =12;
+    }
+    repeated AmendedItems ItemsBeingAmended= 0
+
+    optional string OtherItemBeingAmended = 0 
+
+    // enum CapitationRatesAmendedInfo {
+
+    // }
+}
+  required string name = 1;
+  required int32 age = 2;
+  optional string email = 3;
+}
