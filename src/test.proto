@@ -1,5 +1,5 @@
 message ContractAmendmentInfo  {
-    
+
     enum AmendedItems {
         BENEFITS_PROVIDED = 0;
         CAPITATION_RATES = 1;
@@ -15,15 +15,8 @@ message ContractAmendmentInfo  {
         QUALITY_STANDARDS =11;
         RISK_SHARING_MECHANISM =12;
     }
-    repeated AmendedItems ItemsBeingAmended= 0
+    repeated AmendedItems ItemsBeingAmended = 0;
 
-    optional string OtherItemBeingAmended = 0 
+    optional string OtherItemBeingAmended = 0;
 
-    // enum CapitationRatesAmendedInfo {
-
-    // }
-}
-  required string name = 1;
-  required int32 age = 2;
-  optional string email = 3;
 }
