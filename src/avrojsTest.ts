@@ -1,4 +1,4 @@
-var avrojs = require("avro-js");
+var avrojs = require("avsc");
 var data = require("./domain-models/contractAmendmentInfo.ts");
 
 const avrojsType = avrojs.parse({

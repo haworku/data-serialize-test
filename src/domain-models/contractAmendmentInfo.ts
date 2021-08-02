@@ -19,7 +19,7 @@ const sampleContractAmendmentInfo1 = {
   otherItemBeingAmended: "This is why items amended",
   capitationRatesAmendedInfo: {
     reason: "OTHER",
-    // otherReason: "This is capitation rates info",
+    otherReason: "This is capitation rates info",
   },
   relatedToCovid19: false,
   // relatedToVaccination: false,
