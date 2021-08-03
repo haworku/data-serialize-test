@@ -8,29 +8,32 @@ async function run() {
   const TestContractAmendmentInfo = root.lookupType(
     "testpackage.ContractAmendmentInfo"
   );
-  console.log("--- testing protobufjs ---");
+
+  console.log("\n --- testing protobufjs -----------  \n");
+  console.log("--- \n", "check validity");
   console.log(
+    "--- \n",
     "valid data",
-    Boolean(TestContractAmendmentInfo.verify(data.sampleContractAmendmentInfo1))
+    TestContractAmendmentInfo.verify(data.sampleContractAmendmentInfo1)
   );
   console.log(
-    "valid data",
-    Boolean(TestContractAmendmentInfo.verify(data.sampleContractAmendmentInfo2))
+    "--- \n",
+    "more valid data",
+    TestContractAmendmentInfo.verify(data.sampleContractAmendmentInfo2)
   );
   console.log(
-    "invalid data",
-    Boolean(
-      TestContractAmendmentInfo.verify(data.sampleContractAmendmentInfoInvalid)
-    )
+    "--- \n",
+    "invalid data \n",
+    TestContractAmendmentInfo.verify(data.sampleContractAmendmentInfoInvalid)
   );
   console.log(
-    "verify propertyDoesntExist should be false",
-    Boolean(
-      TestContractAmendmentInfo.verify({ propertyDoesntExist: "not real" })
-    )
+    "--- \n",
+    "verify propertyDoesntExist should be null",
+    TestContractAmendmentInfo.verify({ propertyDoesntExist: "not real" })
   );
   console.log(
-    "invalid data should return failure",
+    "--- \n",
+    "verify valid field with invalid value \n",
     TestContractAmendmentInfo.verify({ relatedToCovid: "not a bool" })
-  ); // "realatedToCovid: bool expected"
+  ); // "relatedToCovid: bool expected"
 }

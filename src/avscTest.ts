@@ -3,7 +3,7 @@ var data = require("./domain-models/contractAmendmentInfo.ts");
 
 const avrojsType = avrojs.parse("./src/test.avsc");
 
-console.log("--- testing avsc ---");
+console.log("\n --- testing avsc ------------   \n");
 // serialize/deserialize
 // var buf = avrojsType.toBuffer(data.sampleContractAmendmentInfo1); // Serialized object.
 // var obj = avrojsType.fromBuffer(buf); // {kind: 'CAT', name: 'Albert'}
@@ -12,18 +12,22 @@ console.log("--- testing avsc ---");
 //Generate random instances of a schema. We might be able to use this for testing?!
 var type = avrojs.parse(avrojsType);
 var randomInstance = type.random(); // E.g. Buffer([48, 152, 2, 123])
-console.log("randomInstance: ", randomInstance);
+console.log("randomInstance: \n", randomInstance);
 
-// Check validity
+console.log("--- \n", "check validity");
+
 console.log(
+  "--- \n",
   "valid data",
   avrojsType.isValid(data.sampleContractAmendmentInfo1)
 );
 console.log(
+  "--- \n",
   "more valid data",
   avrojsType.isValid(data.sampleContractAmendmentInfo2)
 );
 console.log(
+  "--- \n",
   "invalid data",
   avrojsType.isValid(data.sampleContractAmendmentInfoInvalid)
 );
@@ -44,21 +48,12 @@ function getInvalidPaths(
   return paths;
 }
 
-var paths1 = getInvalidPaths(avrojsType, data.sampleContractAmendmentInfo1);
-var paths2 = getInvalidPaths(avrojsType, data.sampleContractAmendmentInfo2);
-
 var pathsInvalid = getInvalidPaths(
   avrojsType,
   data.sampleContractAmendmentInfoInvalid
 );
 
-console.log(
-  "this is an invalid instance",
-  data.sampleContractAmendmentInfoInvalid
-);
-console.log("invalidPaths1: ", paths1);
-console.log("invalidPaths2: ", paths2);
-console.log("invalidPaths3: ", pathsInvalid);
+console.log("invalid paths: ", pathsInvalid);
 
 /* Notes:
 - for isValid checks to work properly the schema names need to make the object being passed in (including casing). This risks being another place we are doubling up on logic, another place to add a new field

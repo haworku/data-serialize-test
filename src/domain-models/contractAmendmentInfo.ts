@@ -22,7 +22,7 @@ const sampleContractAmendmentInfo1 = {
     otherReason: "This is capitation rates info",
   },
   relatedToCovid19: false,
-  // relatedToVaccination: false,
+  relatedToVaccination: false,
 };
 
 const sampleContractAmendmentInfo2 = {
