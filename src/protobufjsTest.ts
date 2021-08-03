@@ -1,18 +1,36 @@
 var protobufjs = require("protobufjs");
 var data = require("./domain-models/contractAmendmentInfo.ts");
-var protoTest = require("./test.proto");
 run().catch((err) => console.log(err));
 
 async function run() {
-  const root = await protobufjs.load(protoTest);
+  const root = await protobufjs.load("./src/test.proto");
 
   const TestContractAmendmentInfo = root.lookupType(
     "testpackage.ContractAmendmentInfo"
   );
-
-  console.log(TestContractAmendmentInfo.verify(data)); // null
+  console.log("--- testing protobufjs ---");
   console.log(
-    TestContractAmendmentInfo.verify({ propertyDoesntExist: "not real" })
-  ); // null
-  console.log(TestContractAmendmentInfo.verify({ age: "not a number" })); // "age: integer expected"
+    "valid data",
+    Boolean(TestContractAmendmentInfo.verify(data.sampleContractAmendmentInfo1))
+  );
+  console.log(
+    "valid data",
+    Boolean(TestContractAmendmentInfo.verify(data.sampleContractAmendmentInfo2))
+  );
+  console.log(
+    "invalid data",
+    Boolean(
+      TestContractAmendmentInfo.verify(data.sampleContractAmendmentInfoInvalid)
+    )
+  );
+  console.log(
+    "verify propertyDoesntExist should be false",
+    Boolean(
+      TestContractAmendmentInfo.verify({ propertyDoesntExist: "not real" })
+    )
+  );
+  console.log(
+    "invalid data should return failure",
+    TestContractAmendmentInfo.verify({ relatedToCovid: "not a bool" })
+  ); // "realatedToCovid: bool expected"
 }

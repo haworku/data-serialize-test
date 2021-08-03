@@ -1,69 +1,9 @@
 var avrojs = require("avsc");
 var data = require("./domain-models/contractAmendmentInfo.ts");
 
-const avrojsType = avrojs.parse({
-  name: "ContractAmendmentInfo",
-  type: "record",
-  fields: [
-    {
-      name: "itemsBeingAmended",
-      type: {
-        type: "array",
-        items: {
-          name: "Item",
-          type: "enum",
-          symbols: [
-            "BENEFITS_PROVIDED",
-            "CAPITATION_RATES",
-            "ENCOUNTER_DATA",
-            "ENROLLEE_ACCESS",
-            "ENROLLMENT_PROCESS",
-            "FINANCIAL_INCENTIVES",
-            "GEO_AREA_SERVED",
-            "GRIEVANCES_AND_APPEALS_SYSTEM",
-            "LENGTH_OF_CONTRACT_PERIOD",
-            "NON_RISK_PAYMENT",
-            "PROGRAM_INTEGRITY",
-            "QUALITY_STANDARDS",
-            "RISK_SHARING_MECHANISM",
-            "OTHER",
-          ],
-        },
-      },
-    },
-    { name: "otherItemBeingAmended", type: ["null", "string"], default: null },
-    {
-      name: "capitationRatesAmendedInfo",
-      type: [
-        "null",
-        {
-          name: "capitationRatesAmendedInfo",
-          type: "record",
-          fields: [
-            {
-              name: "reason",
-              type: {
-                name: "reason",
-                type: "enum",
-                symbols: ["ANNUAL", "MIDYEAR", "OTHER"],
-              },
-            },
-            {
-              name: "otherReason",
-              type: ["null", "string"],
-              default: null,
-            },
-          ],
-        },
-      ],
-      default: null,
-    },
-    { name: "relatedToCovid19", type: "boolean", default: false },
-    { name: "relatedToVaccination", type: ["null", "boolean"], default: null },
-  ],
-});
+const avrojsType = avrojs.parse("./src/test.avsc");
 
-console.log("--- testing avro-js ---");
+console.log("--- testing avsc ---");
 // serialize/deserialize
 // var buf = avrojsType.toBuffer(data.sampleContractAmendmentInfo1); // Serialized object.
 // var obj = avrojsType.fromBuffer(buf); // {kind: 'CAT', name: 'Albert'}
@@ -76,15 +16,15 @@ console.log("randomInstance: ", randomInstance);
 
 // Check validity
 console.log(
-  "valid type",
+  "valid data",
   avrojsType.isValid(data.sampleContractAmendmentInfo1)
 );
 console.log(
-  "another valid type",
+  "more valid data",
   avrojsType.isValid(data.sampleContractAmendmentInfo2)
 );
 console.log(
-  "invalid type",
+  "invalid data",
   avrojsType.isValid(data.sampleContractAmendmentInfoInvalid)
 );
 

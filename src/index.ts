@@ -1,2 +1,2 @@
-require("./avrojsTest.ts");
-// require("./protobufjsTest.ts");
+require("./avscTest.ts");
+require("./protobufjsTest.ts");

@@ -17,20 +17,21 @@ enum AmendedItems {
         QUALITY_STANDARDS =11;
         RISK_SHARING_MECHANISM =12;
     }
-    repeated AmendedItems ItemsBeingAmended = 0;
+    repeated AmendedItems itemsBeingAmended = 0;
 
-    optional string OtherItemBeingAmended = 0;
+    optional string otherItemBeingAmended = 1;
 
     enum CapitationRateAmendmentReason{
         ANNUAL = 0;
         MIDYEAR = 1;
         OTHER = 2;
     }
-   message capitationRatesAmendedInfo {
-        CapitationRateAmendmentReason reason = 0;
-        optional string otherReason = 0;
+   message CapitationRatesAmendedInfo {
+        capitationRateAmendmentReason reason = 0;
+        optional string otherReason = 1;
     }
+    optional CapitationRatesAmendedInfo capitationRateAmendedInfo = 2;
 
-    required boolean RelatedToCovid = 0;
-    optional boolean RatedToVaccination = 0
+    optional bool relatedToCovid = 3;
+    optional bool relatedToVaccination = 4;
 }
