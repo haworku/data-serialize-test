@@ -61,6 +61,10 @@ Does not export types out of box but there is discussion of TS on repo. Will nee
 
 gqlgen supports protobufs
 
+### how do we anticipate sending information about the structure of .proto data to the frontend
+
+TODO
+
 ## Apache Avro
 
 Avro relies on schemas. When Avro data is read, the schema used when writing it is always present.
@@ -89,3 +93,9 @@ Not as good/clear. Have to add a third party tool but no discussion of this in a
 You just make the change in the schema. There are also functions to resolve compatible schemas but didn’t dig far into those
 
 ### what would it take for graphql to interact `.asvc` files
+
+TODO
+
+### how do we anticipate sending information about the structure of .avsc data to the frontend
+
+TODO

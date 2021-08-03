@@ -3,6 +3,10 @@ var data = require("./domain-models/contractAmendmentInfo.ts");
 
 const avrojsType = avrojs.parse("./src/test.avsc");
 
+/* TODO
+- Add examples of serializing and deserializing data
+*/
+
 console.log("\n --- testing avsc ------------   \n");
 // serialize/deserialize
 // var buf = avrojsType.toBuffer(data.sampleContractAmendmentInfo1); // Serialized object.
@@ -54,8 +58,3 @@ var pathsInvalid = getInvalidPaths(
 );
 
 console.log("invalid paths: ", pathsInvalid);
-
-/* Notes:
-- for isValid checks to work properly the schema names need to make the object being passed in (including casing). This risks being another place we are doubling up on logic, another place to add a new field
-- could Avro also handle any conditional logic (e.g. no otherItemBeingAmended unless the itemsBeingAmended has the OTHER enum). Seems like no
-*/

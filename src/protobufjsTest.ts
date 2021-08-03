@@ -2,6 +2,13 @@ var protobufjs = require("protobufjs");
 var data = require("./domain-models/contractAmendmentInfo.ts");
 run().catch((err) => console.log(err));
 
+/* TODO
+- Add examples of serializing and deserializing data
+- Get valid checks working. Right now enum arrays are not working
+  - Based on .proto file, protobuf expects them to be passed in as integers (field numbers) but we have strings 
+  - look into message "reflection" for ways to enhance the `.decode` logic to handle enums as strings
+*/
+
 async function run() {
   const root = await protobufjs.load("./src/test.proto");
 
@@ -35,5 +42,5 @@ async function run() {
     "--- \n",
     "verify valid field with invalid value \n",
     TestContractAmendmentInfo.verify({ relatedToCovid: "not a bool" })
-  ); // "relatedToCovid: bool expected"
+  );
 }
