@@ -83,7 +83,7 @@ Avro relies on schemas. When Avro data is read, the schema used when writing it 
 `avsc` package
 Pure JavaScript implementation of the Avro specification.
 
-More about creating a schema in avro spec [docs](https://avro.apache.org/docs/1.10.2/spec.html#schema_record). See also [`avsc` API docs(https://github.com/mtth/avsc/wiki/API)]
+More about creating a schema in avro spec [docs](https://avro.apache.org/docs/1.10.2/spec.html#schema_record). See also [`avsc` API docs](https://github.com/mtth/avsc/wiki/API)
 
 _Difference from Avro and other systems:_
 
@@ -103,7 +103,7 @@ isValid: (arg0: any, arg1: {
 
 ### how do you add remove fields over time in the avro approach
 
-There are also functions to resolve compatible schemas. See avro docs on [schema resolution](https://avro.apache.org/docs/current/spec.html#Schema+Resolution)
+There are also functions to resolve compatible schemas. See discussion of resolvers in [asvc docs](https://github.com/mtth/avsc/wiki/Advanced-usage#schema-evolution]. See avro docs on [schema resolution](https://avro.apache.org/docs/current/spec.html#Schema+Resolution)
 
 ### avro tooling
 

@@ -9,12 +9,13 @@ console.log("---------------");
 // Serialization/ Encoding
 const toSerializable = (domainData: any) => type.toString(domainData);
 const toDomain = (str: any) => type.fromString(str);
-const str = toSerializable(data.sampleContractAmendmentInfo2);
+const testData = data.sampleContractAmendmentInfo1;
+const str = toSerializable(testData);
 const valFromString = toDomain(str);
-const buf = type.toBuffer(data.sampleContractAmendmentInfo2);
+const buf = type.toBuffer(testData);
 const valFromBuffer = type.fromBuffer(buf);
 
-console.log("given this data \n", data.sampleContractAmendmentInfo1);
+console.log("given this data \n", testData);
 console.log("--- \n", "a serialized string looks like \n", str);
 console.log("--- \n", "deserialized looks like \n", valFromString);
 console.log("--- \n", "an encoded buffer looks like \n", buf);
