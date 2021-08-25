@@ -24,7 +24,8 @@
             "RISK_SHARING_MECHANISM",
             "OTHER"
           ]
-        }
+        },
+        "default": []
       },
       "name": "itemsBeingAmended"
     },

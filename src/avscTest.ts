@@ -1,10 +1,11 @@
-var avrojs = require("avsc");
+import * as avrojs from "avsc";
 var data = require("./domain-models/contractAmendmentInfo.ts");
 const schema = avrojs.parse("./src/test.avsc");
 const type = avrojs.Type.forSchema(schema);
 
 console.log("\n testing avsc  \n");
 console.log("---------------");
+
 // Serialization/ Encoding
 const toSerializable = (domainData: any) => type.toString(domainData);
 const toDomain = (str: any) => type.fromString(str);
