@@ -1,42 +1,25 @@
 var avrojs = require("avsc");
 var data = require("./domain-models/contractAmendmentInfo.ts");
+const schema = avrojs.parse("./src/test.avsc");
+const type = avrojs.Type.forSchema(schema);
 
-const avrojsType = avrojs.parse("./src/test.avsc");
+console.log("\n testing avsc  \n");
+console.log("---------------");
+// Serialization/ Encoding
+const toSerializable = (domainData: any) => type.toString(domainData);
+const toDomain = (str: any) => type.fromString(str);
+const str = toSerializable(data.sampleContractAmendmentInfo2);
+const valFromString = toDomain(str);
+const buf = type.toBuffer(data.sampleContractAmendmentInfo2);
+const valFromBuffer = type.fromBuffer(buf);
 
-/* TODO
-- Add examples of serializing and deserializing data
-*/
+console.log("given this data \n", data.sampleContractAmendmentInfo1);
+console.log("--- \n", "a serialized string looks like \n", str);
+console.log("--- \n", "deserialized looks like \n", valFromString);
+console.log("--- \n", "an encoded buffer looks like \n", buf);
+console.log("--- \n", "decoded from buffer looks like \n", valFromBuffer);
 
-console.log("\n --- testing avsc ------------   \n");
-// serialize/deserialize
-// var buf = avrojsType.toBuffer(data.sampleContractAmendmentInfo1); // Serialized object.
-// var obj = avrojsType.fromBuffer(buf); // {kind: 'CAT', name: 'Albert'}
-// console.log(buf, obj);
-
-//Generate random instances of a schema. We might be able to use this for testing?!
-var type = avrojs.parse(avrojsType);
-var randomInstance = type.random(); // E.g. Buffer([48, 152, 2, 123])
-console.log("randomInstance: \n", randomInstance);
-
-console.log("--- \n", "check validity");
-
-console.log(
-  "--- \n",
-  "valid data",
-  avrojsType.isValid(data.sampleContractAmendmentInfo1)
-);
-console.log(
-  "--- \n",
-  "more valid data",
-  avrojsType.isValid(data.sampleContractAmendmentInfo2)
-);
-console.log(
-  "--- \n",
-  "invalid data",
-  avrojsType.isValid(data.sampleContractAmendmentInfoInvalid)
-);
-
-// Calculate specific invalid fields for error handling
+// Error handling
 function getInvalidPaths(
   type: {
     isValid: (arg0: any, arg1: { errorHook: (path: any) => void }) => void;
@@ -46,15 +29,46 @@ function getInvalidPaths(
   var paths: any[] = [];
   type.isValid(val, {
     errorHook: function (path) {
-      paths.push(path.join());
+      // console.log(path);
+      if (path.length > 0) paths.push(path.join());
     },
   });
   return paths;
 }
 
-var pathsInvalid = getInvalidPaths(
-  avrojsType,
+console.log(
+  "--- \n",
+  "given this invalid data \n",
   data.sampleContractAmendmentInfoInvalid
 );
+console.log(
+  "--- \n",
+  "a custom function for invalid fields can return invalid fields\n",
+  getInvalidPaths(schema, data.sampleContractAmendmentInfoInvalid)
+);
+console.log(
+  "--- \n",
+  "and given this valid data \n",
+  data.sampleContractAmendmentInfo2,
+  "\n a custom function for invalid fields returns",
+  getInvalidPaths(schema, data.sampleContractAmendment2)
+);
 
-console.log("invalid paths: ", pathsInvalid);
+// Other misc notes
+// Took me quite awhile to figure out how to format the schema for an array of enums.
+// Finally realized the "items" may contain any type, no matter how complex.
+// Errors related to schema shape were quite vague - when a schema is malformatted it seems the main way to find out is just keep trying to serialize and then deserialize until it doesn't error.
+// Wasn't able to get line number errors - would report which type had a issue but not where in the schema - if we go this route worth exploring more
+
+// avsc has the ability to try and infer a schema type from a set of values using forValue
+// const forValueType = avrojs.Type.forValue(data.sampleContractAmendmentInfo1);
+// console.log("this is it", forValueType);
+
+// Can generate random instances of a schema using .random
+// var randomInstance = type.random();
+// console.log(randomInstance)
+
+// Can run validity checks using isValid. Note: this will not error for an improperly set up schema
+// schema.isValid(data.sampleContractAmendmentInfo1) // returns true
+// schema.isValid(data.sampleContractAmendmentInfo2) // returns true
+// schema.isValid(data.sampleContractAmendmentInfoInvalid) // returns false

@@ -68,7 +68,7 @@ TODO
 
 ### outstanding questions about protobuf approach
 
-- would we want to store the exact protobuf schema used for a specific submission along with the record?
+- would we want to store the exact protobuf schema used for a specific submission along with the record
 
 ## Apache Avro
 
@@ -99,6 +99,7 @@ Not as good/clear. Have to add a third party tool but no discussion of this in a
 ### how do you add remove fields over time in the avro approach
 
 TODO There are also functions to resolve compatible schemas
+See avro docs on [schema resolution](https://avro.apache.org/docs/current/spec.html#Schema+Resolution)
 
 ### avro tooling
 
@@ -106,9 +107,11 @@ TODO
 
 ### what does the avro schema look like?
 
-TODO
+See [test.avsc](./src/test.avsc)
 
 ### outstanding questions about avro approach
+
+- How much will lack of docs be a pain point? Had much more trouble figuring out the avro schema format and debugging issues than protobufs, simply because there were many more docs.
 
 ## Other readings of interest
 

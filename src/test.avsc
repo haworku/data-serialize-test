@@ -3,12 +3,11 @@
   "type": "record",
   "fields": [
     {
-      "name": "itemsBeingAmended",
       "type": {
         "type": "array",
         "items": {
-          "name": "Item",
           "type": "enum",
+          "name": "itemAmended",
           "symbols": [
             "BENEFITS_PROVIDED",
             "CAPITATION_RATES",
@@ -26,7 +25,8 @@
             "OTHER"
           ]
         }
-      }
+      },
+      "name": "itemsBeingAmended"
     },
     {
       "name": "otherItemBeingAmended",
