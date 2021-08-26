@@ -65,14 +65,14 @@ protobufjs.load("./src/test.proto", function (err, root) {
     "--- \n",
     "and given this valid data \n",
     data.sampleContractAmendmentInfo1,
-    "\n .verify returns",
+    "\n .verify returns \n",
     TestContractAmendmentInfo.verify(data.sampleContractAmendmentInfo1)
   );
 
   console.log(
     "--- \n",
     "can also use .verify with options to check that a specific property does not exist",
-    '\n e.g. TestContractAmendmentInfo.verify({ propertyDoesntExist: "not real" }) returns',
+    '\n e.g. TestContractAmendmentInfo.verify({ propertyDoesntExist: "not real" }) returns \n',
     TestContractAmendmentInfo.verify({ propertyDoesntExist: "not real" })
   );
   console.log(
@@ -86,4 +86,3 @@ protobufjs.load("./src/test.proto", function (err, root) {
 // Other misc notes
 // protobuf always references fields as integers (field numbers)
 // on distribution - Where bundle size is a factor, there are additional stripped-down versions of the full library (~19kb gzipped) available that exclude certain functionality
-// read this https://earthly.dev/blog/backward-and-forward-compatibility/

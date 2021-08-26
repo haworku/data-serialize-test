@@ -28,11 +28,11 @@ enum AmendedItems {
         OTHER = 3;
     }
    message CapitationRatesAmendedInfo {
-        optional capitationRateAmendmentReason reason = 1;
+        optional CapitationRateAmendmentReason reason = 1;
         optional string otherReason = 2;
     }
-    optional CapitationRatesAmendedInfo capitationRateAmendedInfo = 3;
+    optional CapitationRatesAmendedInfo capitationRatesAmendedInfo = 3;
 
-    optional bool relatedToCovid = 4;
+    optional bool relatedToCovid19 = 4;
     optional bool relatedToVaccination = 5;
 }
