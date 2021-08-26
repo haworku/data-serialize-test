@@ -10,18 +10,37 @@ console.log("---------------");
 const toSerializable = (domainData: any) => type.toString(domainData);
 const toDomain = (str: any) => type.fromString(str);
 const testData = data.sampleContractAmendmentInfo1;
-const str = toSerializable(testData);
-const valFromString = toDomain(str);
-const buf = type.toBuffer(testData);
-const valFromBuffer = type.fromBuffer(buf);
 
-console.log("given this data \n", testData);
-console.log("--- \n", "a serialized string looks like \n", str);
-console.log("--- \n", "deserialized looks like \n", valFromString);
-console.log("--- \n", "an encoded buffer looks like \n", buf);
-console.log("--- \n", "decoded from buffer looks like \n", valFromBuffer);
+console.log("------");
+console.log("serialization and encoding \n", "given this data \n", testData);
+console.log(
+  "--- \n",
+  "a serialized string looks like \n",
+  toSerializable(testData)
+);
+console.log(
+  "--- \n",
+  "deserialized looks like \n",
+  toDomain(toSerializable(testData))
+);
+console.log(
+  "--- \n",
+  "an encoded buffer looks like \n",
+  type.toBuffer(testData)
+);
+console.log(
+  "--- \n",
+  "decoded from buffer looks like \n",
+  type.fromBuffer(type.toBuffer(testData))
+);
 
 // Error handling
+console.log("------");
+
+console.log(
+  "\n validation and error handling \n to validate data against an avro schema, you need to write a custom function \n"
+);
+
 function getInvalidPaths(
   type: {
     isValid: (arg0: any, arg1: { errorHook: (path: any) => void }) => void;
@@ -57,8 +76,7 @@ console.log(
 );
 
 // Other misc notes
-// Took me quite awhile to figure out how to format the schema for an array of enums.
-// Finally realized the "items" may contain any type, no matter how complex.
+// Schema array "items" may contain any type, no matter how complex.
 // Errors related to schema shape were quite vague - when a schema is malformatted it seems the main way to find out is just keep trying to serialize and then deserialize until it doesn't error.
 // Wasn't able to get line number errors - would report which type had a issue but not where in the schema - if we go this route worth exploring more
 

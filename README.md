@@ -4,7 +4,7 @@ Comparing protobuf (Google) and avro (Apache) with some contrived examples
 
 ## Why
 
-We have data stored in complex structures that is changing over time. We want to easily understand the structure of the data at the time it was stored, ideally referencing a schema.
+We have data stored in complex structures that is changing over time. We want to easily understand the structure of the data at the time it was stored by referencing a schema. Also want to be able to read the schema both client-side and server-side since both areas of the app need to reference the structure of the data.
 
 ## Comparison checklist
 
@@ -30,49 +30,69 @@ Explored two main packages for bringing in protobuf support to Node.
 
 #### [protobufjs](https://www.npmjs.com/package/protobufjs)
 
-Pure JS implementation. \* Suggested approach for protobuf.
+Pure JS implementation. **Suggested approach**
+
+This package is much more widely used on npm than Google JS port. At the same time, some discussion regarding whether the codebase is being well maintained.
+
+> ”Because JavaScript is a dynamically typed language, protobuf.js introduces the concept of a valid message in order to provide the best possible [performance](https://github.com/protobufjs/protobuf.js/#performance) (and, as a side product, proper typings)”. With this implementation, the message can also be passed in a plain JS object.
 
 #### [google-protobuf](https://www.npmjs.com/package/google-protobuf)
 
-Google implementation of [protobuf](https://github.com/protocolbuffers/protobuf/tree/master/js) for JS.
+Google implementation of [protobuf](https://github.com/protocolbuffers/protobuf/tree/master/js) for JS. Does not export types out of box but there is discussion of TS on repo. Will need a third party util to generate Typescript types- something like [this](https://github.com/thesayyn/protoc-gen-ts) or [this](https://github.com/improbable-eng/ts-protoc-gen#readme).
 
-Generalized steps to use: create schema, compile schema, create and use serializer to translate from protobuf into domain model
+> "Support for ES6-style imports is not implemented yet. Browsers can be supported by using Browserify, webpack, Closure Compiler, or similar to resolve imports at compile time."
 
 **Notes:**
 
 - Would need to run the [protobuf compiler](https://github.com/protocolbuffers/protobuf#protocol-compiler-installation) in our build process
-- for `google-protobuf` package - "Support for ES6-style imports is not implemented yet. Browsers can be supported by using Browserify, webpack, Closure Compiler, or similar to resolve imports at compile time."
-- for `protobufjs` package - this package is much more widely used on npm than Google JS port. At the same time, some discussion regarding whether the codebase is being well maintained. Also re performance - ”Because JavaScript is a dynamically typed language, protobuf.js introduces the concept of a valid message in order to provide the best possible [performance](https://github.com/protobufjs/protobuf.js/#performance) (and, as a side product, proper typings)”. With this implementation, the message can also be passed in a plain JS object.
+- Generalized steps to use: create schema, compile schema, create and use serializer to translate from protobuf into domain model
 
-### what does typescript support look like for protobufs
+### what does typescript support look like for protobuf
 
 **protobufjs**
-Supports Typescript [out of the box](https://github.com/protobufjs/protobuf.js/#usage-with-typescript). Here is an [issue](https://github.com/protobufjs/protobuf.js/issues/1327) that has more detail about TS support.
+Supports Typescript [out of the box](https://github.com/protobufjs/protobuf.js/#usage-with-typescript). Types seeem well defined. Here is an [issue](https://github.com/protobufjs/protobuf.js/issues/1327) that has more detail about TS support.
 
-**google-protobuf**
-Does not export types out of box but there is discussion of TS on repo. Will need a third party util to generate Typescript types- something like [this](https://github.com/thesayyn/protoc-gen-ts) or [this](https://github.com/improbable-eng/ts-protoc-gen#readme).
+example:
+
+```typescript
+(method) Type.verify(message: {
+    [k: string]: any;
+}): string | null
+Verifies that field values are valid and that required fields are present.
+
+@param message — Plain object to verify
+
+@returns — null if valid, otherwise the reason why it is not
+```
 
 ### how do you add remove fields over time in protobuf approach
 
-- get familiar with [field numbers](https://developers.google.com/protocol-buffers/docs/proto3#assigning_field_numbers)
+TODO
+
+- [field numbers](https://developers.google.com/protocol-buffers/docs/proto3#assigning_field_numbers) are essential
 - ideally don't remove fields and don't make fields required
 - on [backwards compatibility issues with oneof fields](https://developers.google.com/protocol-buffers/docs/proto3#backwards-compatibility_issues). Relevant for dealing with enums.
 
 ### protobuf tooling
 
-- graphql - `gqlge`n` supports protobufs
+TODO
+
+- graphql - `gqlgen` supports protobufs
 
 ### what does the protobuf schema look like?
 
 TODO
 
+See [test.proto](./src/test.proto)
+
 ### outstanding questions about protobuf approach
 
-- would we want to store the exact protobuf schema used for a specific submission along with the record
+- how will we store and associate the protobuf schema used for a specific submission.
+- what does schema resolution look like with protobufs
 
 ## Apache Avro
 
-Avro relies on schemas. When Avro data is read, the schema used when writing it is always present.
+Avro relies on schemas. When Avro data is read or written, the schema is always present.
 
 ### `.avsc` file type
 
@@ -88,7 +108,7 @@ More about creating a schema in avro spec [docs](https://avro.apache.org/docs/1.
 _Difference from Avro and other systems:_
 
 > - Dynamic typing: Avro does not require that code be generated.
-> - Untagged data: schema is present when data is read. Sounds like this can be a pro and con - you always need to have the schema around to do things.
+> - Untagged data: Avro data itself is not tagged with type information. The schema is required to parse data.
 > - No manually-assigned field IDs: When a schema changes, both the old and new schema are always present when processing date. Differences are resolved using field `name`.
 
 ### what does typescript support look like for avro
@@ -103,11 +123,13 @@ isValid: (arg0: any, arg1: {
 
 ### how do you add remove fields over time in the avro approach
 
-There are also functions to resolve compatible schemas. See discussion of resolvers in [asvc docs](https://github.com/mtth/avsc/wiki/Advanced-usage#schema-evolution]. See avro docs on [schema resolution](https://avro.apache.org/docs/current/spec.html#Schema+Resolution)
+There are functions to resolve compatible schemas. See discussion of [createResolver](https://github.com/mtth/avsc/wiki/API#typecreateresolverwritertype-opts) and schema evolution in [asvc docs](https://github.com/mtth/avsc/wiki/Advanced-usage#schema-evolution). This pattern allows comparing subsets of fields within a record.
+
+See avro docs on [schema resolution](https://avro.apache.org/docs/current/spec.html#Schema+Resolution)
 
 ### avro tooling
 
-Didn't see any tooling specifically we would need to start using this package.
+Didn't see any tooling specifically we would need to start using this package as is server side or client side.
 
 ### what does the avro schema look like?
 
@@ -115,8 +137,8 @@ See [test.avsc](./src/test.avsc)
 
 ### outstanding questions about avro approach
 
-- How much will lack of docs be a pain point? Does it matter if we go with a less widely used option like Avro over protobufs - which is well documented in multiple languages?
-- -Had trouble figuring out the avro schema format and debugging issues. Error messages were vague, no line numbers. Was harder to find example schemas or discussion of approaches on stackoverflow. Specifically nesting of types (for example, see itemsAmended in `test.avsc`) could be a lot to grok if we plan to nest our data structure more layers.
+- How much will lack of docs and well defined types be a pain point? Does it matter if we go with a less widely used option like Avro over protobufs - which is well documented in multiple languages, has robust TS support?
+- Had trouble debugging issues with avro schema. Error messages were vague, no line numbers. Was harder to find example schemas or discussion of approaches on stackoverflow. Specifically nesting of types (for example, see itemsAmended in `test.avsc`) could be a lot to grok if we plan to nest our data structure within more layers.
 
 ## Other readings of interest
 

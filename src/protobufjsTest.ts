@@ -1,46 +1,89 @@
-var protobufjs = require("protobufjs");
+import * as protobufjs from "protobufjs";
 var data = require("./domain-models/contractAmendmentInfo.ts");
-run().catch((err) => console.log(err));
 
-/* TODO
-- Add examples of serializing and deserializing data
-- Get valid checks working. Right now enum arrays are not working
-  - Based on .proto file, protobuf expects them to be passed in as integers (field numbers) but we have strings 
-  - look into message "reflection" for ways to enhance the `.decode` logic to handle enums as strings
-*/
+console.log("\n testing protobuf  \n");
+console.log("---------------");
 
-async function run() {
-  const root = await protobufjs.load("./src/test.proto");
+protobufjs.load("./src/test.proto", function (err, root) {
+  if (err) throw err;
+  if (root === undefined) {
+    console.log("no schema");
+    return;
+  }
 
   const TestContractAmendmentInfo = root.lookupType(
     "testpackage.ContractAmendmentInfo"
   );
 
-  console.log("\n --- testing protobufjs -----------  \n");
-  console.log("--- \n", "check validity");
+  // Serialization/ Encoding
+  const toSerializable = (domainData: any) =>
+    JSON.stringify(TestContractAmendmentInfo.create(domainData));
+  const toDomain = (str: any) => JSON.parse(str);
+  const testData = data.sampleContractAmendmentInfo1;
+  console.log("given this data \n", testData);
   console.log(
     "--- \n",
-    "valid data",
-    TestContractAmendmentInfo.verify(data.sampleContractAmendmentInfo1)
+    "a serialized string looks like \n",
+    toSerializable(testData)
   );
   console.log(
     "--- \n",
-    "more valid data",
-    TestContractAmendmentInfo.verify(data.sampleContractAmendmentInfo2)
+    "deserialized looks like \n",
+    toDomain(toSerializable(testData))
   );
   console.log(
     "--- \n",
-    "invalid data \n",
+    "an encoded buffer looks like \n",
+    TestContractAmendmentInfo.encode(
+      TestContractAmendmentInfo.create(testData)
+    ).finish()
+  );
+  console.log(
+    "--- \n",
+    "decoded from buffer looks like \n",
+    TestContractAmendmentInfo.decode(
+      TestContractAmendmentInfo.encode(
+        TestContractAmendmentInfo.create(testData)
+      ).finish()
+    )
+  );
+
+  // Error handling
+  console.log("------");
+  console.log(
+    "\n validation and error handling \n to validate data against an protobuf schema, you can use .verify \n"
+  );
+
+  console.log(
+    "--- \n",
+    "given this invalid data \n",
+    data.sampleContractAmendmentInfoInvalid,
+    " \n .verify returns \n",
     TestContractAmendmentInfo.verify(data.sampleContractAmendmentInfoInvalid)
   );
   console.log(
     "--- \n",
-    "verify propertyDoesntExist should be null",
+    "and given this valid data \n",
+    data.sampleContractAmendmentInfo1,
+    "\n .verify returns",
+    TestContractAmendmentInfo.verify(data.sampleContractAmendmentInfo1)
+  );
+
+  console.log(
+    "--- \n",
+    "can also use .verify with options to check that a specific property does not exist",
+    '\n e.g. TestContractAmendmentInfo.verify({ propertyDoesntExist: "not real" }) returns',
     TestContractAmendmentInfo.verify({ propertyDoesntExist: "not real" })
   );
   console.log(
     "--- \n",
-    "verify valid field with invalid value \n",
+    "or verify a specific field value",
+    '\n e.g. TestContractAmendmentInfo.verify({ relatedToCovid: "not a bool" }) returns',
     TestContractAmendmentInfo.verify({ relatedToCovid: "not a bool" })
   );
-}
+});
+
+// Other misc notes
+// protobuf always references fields as integers (field numbers)
+// on distribution - Where bundle size is a factor, there are additional stripped-down versions of the full library (~19kb gzipped) available that exclude certain functionality
+// read this https://earthly.dev/blog/backward-and-forward-compatibility/

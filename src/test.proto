@@ -6,7 +6,7 @@ enum AmendedItems {
     BENEFITS_PROVIDED = 1;
     CAPITATION_RATES = 2;
     ENCOUNTER_DATA = 3;
-    ENROLLE_ACCESS = 4;
+    ENROLLEE_ACCESS = 4;
     ENROLLMENT_PROCESS = 5;
     FINANCIAL_INCENTIVES = 6;
     GEO_AREA_SERVED = 7;
@@ -28,7 +28,7 @@ enum AmendedItems {
         OTHER = 3;
     }
    message CapitationRatesAmendedInfo {
-        capitationRateAmendmentReason reason = 1;
+        optional capitationRateAmendmentReason reason = 1;
         optional string otherReason = 2;
     }
     optional CapitationRatesAmendedInfo capitationRateAmendedInfo = 3;
