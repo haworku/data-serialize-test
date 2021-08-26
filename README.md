@@ -22,30 +22,39 @@ Protocol buffers are Google's language-neutral, platform-neutral, extensible mec
 
 ### `.proto` file type
 
-`.proto` extension. [spec](https://developers.google.com/protocol-buffers/docs/proto3)
+`.proto` extension. [spec](https://developers.google.com/protocol-buffers/docs/proto3).
+
+See also discussion of [tradeoffs](https://github.com/protobufjs/protobuf.js/blob/d01394a1463062824c066b653aad53c449752202/cli/README.md#reflection-vs-static-code) between `.proto`, JSON, and static code generation.
 
 ### installation and usage and notes
 
-Explored two main packages for bringing in protobuf support to Node.
+Explored two main packages for bringing protobuf support to Node.
 
 #### [protobufjs](https://www.npmjs.com/package/protobufjs)
 
-Pure JS implementation. **Suggested approach**
-
-This package is much more widely used on npm than Google JS port. At the same time, some discussion regarding whether the codebase is being well maintained.
+Pure JS implementation. 73.5kB minimized. Also a [lightweight version](https://github.com/dcodeIO/protobuf.js/tree/master/dist/light) and [minimal version](https://github.com/protobufjs/protobuf.js/tree/master/dist/minimal) available.
 
 > ”Because JavaScript is a dynamically typed language, protobuf.js introduces the concept of a valid message in order to provide the best possible [performance](https://github.com/protobufjs/protobuf.js/#performance) (and, as a side product, proper typings)”. With this implementation, the message can also be passed in a plain JS object.
 
+This package is much more widely used on npm than Google JS port and using this tool does not require a separate compile step while using `.proto` files directly.
+
+However...
+
+- lots of open issues.
+- there is [discussion](https://github.com/protobufjs/protobuf.js/issues/1327#issue-527757006) regarding whether the codebase is being well maintained.
+
 #### [google-protobuf](https://www.npmjs.com/package/google-protobuf)
 
-Google implementation of [protobuf](https://github.com/protocolbuffers/protobuf/tree/master/js) for JS. Does not export types out of box but there is discussion of TS on repo. Will need a third party util to generate Typescript types- something like [this](https://github.com/thesayyn/protoc-gen-ts) or [this](https://github.com/improbable-eng/ts-protoc-gen#readme).
+229.5kB minified
 
-> "Support for ES6-style imports is not implemented yet. Browsers can be supported by using Browserify, webpack, Closure Compiler, or similar to resolve imports at compile time."
+Google implementation of [protobuf](https://github.com/protocolbuffers/protobuf/tree/master/js) for JS. Stable and maintained, likely more comparable to using protobufs in other languages.
 
-**Notes:**
+However...
 
-- Would need to run the [protobuf compiler](https://github.com/protocolbuffers/protobuf#protocol-compiler-installation) in our build process
-- Generalized steps to use: create schema, compile schema, create and use serializer to translate from protobuf into domain model
+- will need to run the [protobuf compiler](https://github.com/protocolbuffers/protobuf#protocol-compiler-installation) in our build process and into local dev. Something like `yarn proto gen` that acts similar to gql codegen.
+- will need a third party util to generate Typescript types - something like [this](https://github.com/improbable-eng/ts-protoc-gen#readme) or [this](https://github.com/stephenh/ts-proto).
+- while the protocol buffers spec is well documented, the API for this lib [is not](https://github.com/protocolbuffers/protobuf/tree/master/js#api)
+- support for ES6-style imports is not implemented yet
 
 ### what does typescript support look like for protobuf
 
@@ -65,21 +74,30 @@ Verifies that field values are valid and that required fields are present.
 @returns — null if valid, otherwise the reason why it is not
 ```
 
+**google-protobuf**
+Does not support types out of the box.
+
 ### how do you add remove fields over time in protobuf approach
 
 TODO
 
-- [field numbers](https://developers.google.com/protocol-buffers/docs/proto3#assigning_field_numbers) are essential
-- ideally don't remove fields and don't make fields required
-- on [backwards compatibility issues with oneof fields](https://developers.google.com/protocol-buffers/docs/proto3#backwards-compatibility_issues). Relevant for dealing with enums.
+- read this read this https://earthly.dev/blog/backward-and-forward-compatibility/
+
+- [field numbers](https://developers.google.com/protocol-buffers/docs/proto3#assigning_field_numbers) are essential, they can't be deleted
+- rule of thumb: don't remove fields and don't make fields required
+- on [backwards compatibility issues with oneof fields](https://developers.google.com/protocol-buffers/docs/proto3#backwards-compatibility_issues). This is relevant for dealing with enums.
 
 ### protobuf tooling
 
 TODO
 
-- graphql - `gqlgen` supports protobufs
+- read this https://medium.com/expedia-group-tech/the-weird-world-of-grpc-tooling-for-node-js-part-1-40a442966876
 
-### what does the protobuf schema look like?
+- if not using protobufjs, some kind of support for typescript needed. Some options:
+  - [`ts-protoc-gen`](https://github.com/improbable-eng/ts-protoc-gen#readme)
+  - [`ts-proto`](https://github.com/stephenh/ts-proto).
+
+## what does the protobuf schema look like?
 
 TODO
 
