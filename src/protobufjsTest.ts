@@ -79,7 +79,7 @@ protobufjs.load("./src/test.proto", function (err, root) {
     "--- \n",
     "or verify a specific field value",
     '\n e.g. TestContractAmendmentInfo.verify({ relatedToCovid: "not a bool" }) returns',
-    TestContractAmendmentInfo.verify({ relatedToCovid: "not a bool" })
+    TestContractAmendmentInfo.verify({ relatedToCovid19: "not a bool" })
   );
 });
 

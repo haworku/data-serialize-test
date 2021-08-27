@@ -31,7 +31,7 @@ enum AmendedItems {
         optional CapitationRateAmendmentReason reason = 1;
         optional string otherReason = 2;
     }
-    optional CapitationRatesAmendedInfo capitationRatesAmendedInfo = 3;
+optional CapitationRatesAmendedInfo capitationRatesAmendedInfo = 3;
 
     optional bool relatedToCovid19 = 4;
     optional bool relatedToVaccination = 5;
