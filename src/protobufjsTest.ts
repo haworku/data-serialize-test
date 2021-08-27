@@ -1,4 +1,7 @@
 import * as protobufjs from "protobufjs";
+
+import { testpackage } from './compiled'
+
 var data = require("./domain-models/contractAmendmentInfo.ts");
 
 console.log("\n testing protobuf  \n");
@@ -43,10 +46,64 @@ protobufjs.load("./src/test.proto", function (err, root) {
     "decoded from buffer looks like \n",
     TestContractAmendmentInfo.decode(
       TestContractAmendmentInfo.encode(
-        TestContractAmendmentInfo.create(testData)
+        TestContractAmendmentInfo.fromObject(testData)
       ).finish()
     )
   );
+
+  // with vars
+
+  console.log("----\n OBJECT IN\n", testData)
+
+  //modifty enum
+  // testData.itemsBeingAmended = [1,2,3]
+  // For some reason, putting this through the JSON wringer makes it convert string enums into integers correctly...
+  const message = TestContractAmendmentInfo.fromObject(testData)
+
+  console.log("MEssage", message)
+  const encoded = TestContractAmendmentInfo.encode(message).finish()
+
+  const decodedMessage = TestContractAmendmentInfo.decode(encoded)
+  console.log("Decode message", decodedMessage)
+  const object = TestContractAmendmentInfo.toObject(decodedMessage, {
+    enums: String,
+  })
+
+  console.log("----\n OBJECT OUT: \n", object)
+
+
+   // with the compiled code
+   console.log("--- COMPILED ----")
+
+   const literalTestData: testpackage.IContractAmendmentInfo = {
+    itemsBeingAmended: [
+      testpackage.ContractAmendmentInfo.AmendedItems.BENEFITS_PROVIDED,
+      testpackage.ContractAmendmentInfo.AmendedItems.ENROLLMENT_PROCESS,
+      testpackage.ContractAmendmentInfo.AmendedItems.NON_RISK_PAYMENT,
+      testpackage.ContractAmendmentInfo.AmendedItems.OTHER,
+    ],
+    otherItemBeingAmended: 'Another strange reason',
+    capitationRatesAmendedInfo: {
+      reason: testpackage.ContractAmendmentInfo.CapitationRateAmendmentReason.OTHER,
+      otherReason: 'Biweekly'
+    },
+    relatedToCovid19: false,
+    relatedToVaccination: false,
+   }
+
+   // from Object does enum conversion
+   // const cMessage = testpackage.ContractAmendmentInfo.fromObject(testData)
+   const cMessage = testpackage.ContractAmendmentInfo.create(literalTestData)
+   console.log("cMessage", cMessage)
+
+   const cEncoded = testpackage.ContractAmendmentInfo.encode(cMessage).finish()
+
+   const cDecoded = testpackage.ContractAmendmentInfo.decode(cEncoded)
+
+   console.log("Decode message", cDecoded)
+
+  cDecoded.otherItemBeingAmended
+
 
   // Error handling
   console.log("------");
