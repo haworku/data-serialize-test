@@ -2,6 +2,18 @@
 
 Protocol buffers are Google's language-neutral, platform-neutral, extensible mechanism for serializing structured data.
 
+## Setup
+
+You need to compile the .proto file to be able to run the code. 
+
+```bash
+# This generates javascript code purpose built for encoding/decoding our test.proto
+npx pbjs -t static-module -w commonjs -o src/compiled.js src/test.proto
+# this generates typescript types for that code
+npx pbts -o src/compiled.d.ts src/compiled.js
+
+```
+
 ## `.proto` file type
 
 `.proto` extension. [spec](https://developers.google.com/protocol-buffers/docs/proto3).
