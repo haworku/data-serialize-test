@@ -2,23 +2,11 @@
 
 Protocol buffers are Google's language-neutral, platform-neutral, extensible mechanism for serializing structured data.
 
-## Setup
-
-You need to compile the .proto file to be able to run the code. 
-
-```bash
-# This generates javascript code purpose built for encoding/decoding our test.proto
-npx pbjs -t static-module -w commonjs -o src/compiled.js src/test.proto
-# this generates typescript types for that code
-npx pbts -o src/compiled.d.ts src/compiled.js
-
-```
-
 ## `.proto` file type
 
 `.proto` extension. [spec](https://developers.google.com/protocol-buffers/docs/proto3).
 
-See also discussion of [tradeoffs](https://github.com/protobufjs/protobuf.js/blob/d01394a1463062824c066b653aad53c449752202/cli/README.md#reflection-vs-static-code) between `.proto`, JSON, and static code generation.
+You will need to compile your code. See discussion of [tradeoffs](https://github.com/protobufjs/protobuf.js/blob/d01394a1463062824c066b653aad53c449752202/cli/README.md#reflection-vs-static-code) between storing schema as `.proto`, JSON, and static code.
 
 ## installation and usage and notes
 
@@ -36,6 +24,19 @@ However...
 
 - lots of open issues.
 - there is [discussion](https://github.com/protobufjs/protobuf.js/issues/1327#issue-527757006) regarding whether the codebase is being well maintained.
+
+
+### Setup for protobufjs
+
+You need to compile the .proto file to be able to run the code. 
+
+```bash
+# This generates javascript code purpose built for encoding/decoding our test.proto
+npx pbjs -t static-module -w commonjs -o src/compiled.js src/test.proto
+# this generates typescript types for that code
+npx pbts -o src/compiled.d.ts src/compiled.js
+
+```
 
 ### [google-protobuf](https://www.npmjs.com/package/google-protobuf)
 
@@ -73,20 +74,15 @@ Does not support types out of the box.
 
 ## how do you add remove fields over time in protobuf approach
 
-TODO
-
-- read this read this https://earthly.dev/blog/backward-and-forward-compatibility/
-- [field numbers](https://developers.google.com/protocol-buffers/docs/proto3#assigning_field_numbers) are essential, they can't be deleted
 - rule of thumb: don't remove fields and don't make fields required
-- on [backwards compatibility issues with oneof fields](https://developers.google.com/protocol-buffers/docs/proto3#backwards-compatibility_issues). This is relevant for dealing with enums.
+- [field numbers](https://developers.google.com/protocol-buffers/docs/proto3#assigning_field_numbers) are essential, they can't be deleted
+- read about [backward and forward comptability](https://earthly.dev/blog/backward-and-forward-compatibility/)
+(- on [backwards compatibility issues with oneof fields](https://developers.google.com/protocol-buffers/docs/proto3#backwards-compatibility_issues). This is relevant for dealing with enums.
 
 ## tooling
 
-TODO
-
-- read this https://medium.com/expedia-group-tech/the-weird-world-of-grpc-tooling-for-node-js-part-1-40a442966876
-
-- if not using protobufjs, some kind of support for typescript needed. Some options:
+-  a lot to consider here - read [this](https://medium.com/expedia-group-tech/the-weird-world-of-grpc-tooling-for-node-js-part-1-40a442966876) for a good summary 
+- if not using protobufjs, additional support for typescript needed. Some options:
   - [`ts-protoc-gen`](https://github.com/improbable-eng/ts-protoc-gen#readme)
   - [`ts-proto`](https://github.com/stephenh/ts-proto).
 
