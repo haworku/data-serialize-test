@@ -12,6 +12,7 @@ We have data stored in complex structures that is changing over time. We want to
 - installation/usage notes
 - what does typescript support look like
 - how do you add remove fields over time
+- how to store schema and data in db
 - tooling
 - what does the schema look like?
 - outstanding questions

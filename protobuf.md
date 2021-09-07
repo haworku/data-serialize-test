@@ -61,18 +61,20 @@ Does not support types out of the box.
 
 ## how do you add remove fields over time in protobuf approach
 
-TODO
+You can add new fields to the schema, provided that you give each field a new field number. If old code tries to read data written by new code with new fields, it can simply ignore that field. In terms of backward compatibility, new code can always read old data as well since the field numbers are unique.
+Basics:
 
-- read this read this https://earthly.dev/blog/backward-and-forward-compatibility/
-- [field numbers](https://developers.google.com/protocol-buffers/docs/proto3#assigning_field_numbers) are essential, they can't be deleted
+- [field numbers](https://developers.google.com/protocol-buffers/docs/proto3#assigning_field_numbers) are essential
 - rule of thumb: don't remove fields and don't make fields required
 - on [backwards compatibility issues with oneof fields](https://developers.google.com/protocol-buffers/docs/proto3#backwards-compatibility_issues). This is relevant for dealing with enums.
+- changing the data type of a field is possible but there is a risk values lose precision or get truncated
+- `repeated` marker is what Protobufs uses for arrays. This means is trivial for a schema to interpret a change for a field from a single value to an array of those values or back again. New code reading old data sees a list with zero or one elements (depending on whether the field was present); old code reading new data sees only the last element of the list.
+
+## how to store protobuf schema in db
+
+- Protobufs [does not have self describing messages](https://developers.google.com/protocol-buffers/docs/techniques#self-description). Likely in our use case `.proto` file will have to be updated.
 
 ## tooling
-
-TODO
-
-- read this https://medium.com/expedia-group-tech/the-weird-world-of-grpc-tooling-for-node-js-part-1-40a442966876
 
 - if not using protobufjs, some kind of support for typescript needed. Some options:
   - [`ts-protoc-gen`](https://github.com/improbable-eng/ts-protoc-gen#readme)
@@ -84,5 +86,5 @@ See [test.proto](./src/test.proto)
 
 ## outstanding questions about protobuf approach
 
-- how will we store and associate the protobuf schema used for a specific submission.
-- what does schema resolution look like with protobufs
+- how will we store and associate the protobuf schema used for a specific submission. We could send `.proto`s in JSON format to the frotend.
+- what does schema resolution look like with protobufs - we will need to build our own utilities for this.
