@@ -6,7 +6,7 @@ Protocol buffers are Google's language-neutral, platform-neutral, extensible mec
 
 `.proto` extension. [spec](https://developers.google.com/protocol-buffers/docs/proto3).
 
-See also discussion of [tradeoffs](https://github.com/protobufjs/protobuf.js/blob/d01394a1463062824c066b653aad53c449752202/cli/README.md#reflection-vs-static-code) between `.proto`, JSON, and static code generation.
+You will need to compile your code. See discussion of [tradeoffs](https://github.com/protobufjs/protobuf.js/blob/d01394a1463062824c066b653aad53c449752202/cli/README.md#reflection-vs-static-code) between storing schema as `.proto`, JSON, and static code.
 
 ## installation and usage and notes
 
@@ -24,6 +24,18 @@ However...
 
 - lots of open issues.
 - there is [discussion](https://github.com/protobufjs/protobuf.js/issues/1327#issue-527757006) regarding whether the codebase is being well maintained.
+
+### Setup for protobufjs
+
+You need to compile the .proto file to be able to run the code.
+
+```bash
+# This generates javascript code purpose built for encoding/decoding our test.proto
+npx pbjs -t static-module -w commonjs -o src/compiled.js src/test.proto
+# this generates typescript types for that code
+npx pbts -o src/compiled.d.ts src/compiled.js
+
+```
 
 ### [google-protobuf](https://www.npmjs.com/package/google-protobuf)
 
